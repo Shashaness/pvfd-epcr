@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EMSDataSet xmlns="http://www.nemsis.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" UUID="25d8a282-e79a-45ca-986d-b3fe0733ca7d">
+  <Header>
+    <DemographicGroup>
+      <dAgency.01>PVFD-AGENCY-NUMBER</dAgency.01>
+      <dAgency.02>PVFD-AGENCY-NUMBER</dAgency.02>
+      <dAgency.03>Pleasant Valley Fire District</dAgency.03>
+      <dAgency.04>04</dAgency.04>
+    </DemographicGroup>
+  </Header>
+  <PatientCareReport UUID="9c886e45-66d0-48da-b515-e5f11a6ec130">
+    <eRecord>
+      <eRecord.01>20261022141530-SYNTHETIC</eRecord.01>
+      <eRecord.02>3.5.1</eRecord.02>
+    </eRecord>
+    <eResponse>
+      <eResponse.01>20261022141530-SYNTHETIC</eResponse.01>
+      <eResponse.03>20261022141530-SYNTHETIC</eResponse.03>
+      <eResponse.05>EMT</eResponse.05>
+      <eResponse.07 xsi:nil="true" NV="7701003"/>
+      <eResponse.09 xsi:nil="true" NV="7701003"/>
+      <eResponse.23>100 Synthetic &amp; Test Lane</eResponse.23>
+    </eResponse>
+    <eDispatch>
+      <eDispatch.01 xsi:nil="true" NV="7701003"/>
+      <eDispatch.02 xsi:nil="true" NV="7701003"/>
+    </eDispatch>
+    <eTimes>
+      <eTimes.01>__CREATED_LOCAL__</eTimes.01>
+      <eTimes.03>__CREATED_LOCAL__</eTimes.03>
+      <eTimes.05 xsi:nil="true" NV="7701003"/>
+      <eTimes.06 xsi:nil="true" NV="7701003"/>
+      <eTimes.07 xsi:nil="true" NV="7701003"/>
+      <eTimes.09 xsi:nil="true" NV="7701003"/>
+      <eTimes.11 xsi:nil="true" NV="7701003"/>
+      <eTimes.12 xsi:nil="true" NV="7701003"/>
+      <eTimes.13 xsi:nil="true" NV="7701003"/>
+    </eTimes>
+    <ePatient>
+      <ePatient.01 xsi:nil="true" NV="7701003"/>
+      <ePatient.02>Test &amp; Example</ePatient.02>
+      <ePatient.03>Synthetic &lt;A></ePatient.03>
+      <ePatient.13>9906001</ePatient.13>
+      <ePatient.15>40</ePatient.15>
+      <ePatient.16>2516009</ePatient.16>
+    </ePatient>
+    <eSituation>
+      <eSituation.01 xsi:nil="true" NV="7701003"/>
+      <eSituation.02 xsi:nil="true" NV="7701003"/>
+      <eSituation.07>Synthetic complaint</eSituation.07>
+      <eSituation.09>Synthetic complaint</eSituation.09>
+    </eSituation>
+    <eHistory>
+      <eHistory.06>Synthetic allergy</eHistory.06>
+      <eHistory.12>Synthetic medication</eHistory.12>
+    </eHistory>
+    <eVitals>
+      <eVitals.01>__CREATED_LOCAL__</eVitals.01>
+      <eVitals.06>120</eVitals.06>
+      <eVitals.10>80</eVitals.10>
+      <eVitals.12>80</eVitals.12>
+      <eVitals.14 xsi:nil="true" NV="7701003"/>
+      <eVitals.16>98</eVitals.16>
+      <eVitals.18>100</eVitals.18>
+      <eVitals.19>14</eVitals.19>
+    </eVitals>
+    <eExam>
+      <eExam.13>3</eExam.13>
+      <eExam.14>5</eExam.14>
+      <eExam.15>6</eExam.15>
+      <eExam.16>14</eExam.16>
+    </eExam>
+    <eDisposition>
+      <eDisposition.12>Synthetic disposition</eDisposition.12>
+      <eDisposition.16 xsi:nil="true" NV="7701003"/>
+      <eDisposition.17 xsi:nil="true" NV="7701003"/>
+    </eDisposition>
+    <eNarrative>
+      <eNarrative.01>Assessment: Synthetic assessment &lt;stable> Treatment: Synthetic treatment Disposition: Synthetic disposition Allergies: Synthetic allergy Medications: Synthetic medication GCS: E3 V5 M6 = 14 Level of care: EMT Responders: F1, R2 Forest Land: Yes GPS Coordinates: 34.10, -110.90 Emergency Contact: Synthetic Contact Emergency Contact Number: 000-000-0000 Reporting Party: Synthetic Reporter Reporting Party Number: 000-000-0001 Form completed by: Synthetic Responder Signature captured: No</eNarrative.01>
+    </eNarrative>
+    <!-- PVFD Flutter export. Validate with official NEMSIS 3.5.1 XSD and National/Arizona Schematron before submission. -->
+  </PatientCareReport>
+</EMSDataSet>

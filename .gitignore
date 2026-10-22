@@ -1,0 +1,81 @@
+# Flutter / Dart and generated build state
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+coverage/
+.gradle/
+.cxx/
+Pods/
+.symlinks/
+ephemeral/
+**/generated_plugin_registrant.*
+**/generated_plugins.cmake
+**/GeneratedPluginRegistrant.*
+
+# Local configuration
+.env
+.env.*
+!.env.example
+**/local.properties
+**/key.properties
+*.local
+
+# Signing and private keys
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.pem
+*.key
+*.mobileprovision
+
+# Local IDE / OS state
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.DS_Store
+xcuserdata/
+
+# Operational patient records, exports, interrupted saves and backups
+**/Exports/
+**/exports/
+**/patient_data/
+**/patient_records/
+**/records/
+**/backups/
+pcr_*.json
+PVFD_ePCR_*.pdf
+PVFD_ePCR_*.xml
+*.epcr-tmp-*
+.epcr-tmp-*
+*.reserve
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.bak
+*.backup
+
+# Logs, dumps, packages and temporary files
+*.log
+*.tmp
+*.dmp
+*.hprof
+*.apk
+*.aab
+*.ipa
+*.app/
+
+# Local-only assets with unverified district branding redistribution rights
+/assets/
+
+# Historical unsupported entry points: retained locally, excluded non-destructively
+/pvfd_epcr/lib/main_old.dart
+/pvfd_epcr/lib/main_sha.dart
+/pvfd_epcr/lib/main_last_20260701.dart
