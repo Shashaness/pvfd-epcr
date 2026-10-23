@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'encrypted_envelope.dart';
 import 'encryption_types.dart';
 
-/// Inactive foundation: no filesystem access, repository wiring or auto-keying.
+/// Byte-only encryption. Persistence and explicit key lifecycle belong to storage.
 class RecordEncryptionService {
   const RecordEncryptionService({required this.keys, required this.cipher});
   final EncryptionKeyManager keys;

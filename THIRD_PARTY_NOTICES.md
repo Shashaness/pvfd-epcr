@@ -15,6 +15,7 @@ The following installed versions were resolved in the reviewed environment. Pack
 | Flutter SDK | 3.47.7 | BSD-3-Clause, SDK LICENSE |
 | flutter_test | SDK | SDK license applies; no separate package LICENSE found locally |
 | flutter_lints | 6.0.0 | BSD-3-Clause |
+| crypto (Milestone 4.2B SHA-256; existing transitive package promoted to direct) | 3.0.7 | BSD-3-Clause |
 | cryptography (Milestone 4.1 tests only) | 2.9.0 | Apache-2.0 |
 | cupertino_icons | 1.0.9 | MIT |
 | pdf | 3.12.0 | Apache-2.0 |

@@ -1,16 +1,21 @@
 import 'dart:async';
 import 'dart:io';
+import 'support/protected_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pvfd_epcr/data/repositories/epcr_repository.dart';
-import 'package:pvfd_epcr/data/storage/epcr_storage_service.dart';
 import 'package:pvfd_epcr/domain/models/epcr_record.dart';
 
 void main() {
   late Directory dir;
   late LocalEpcrRepository repository;
+  late SyntheticStorageEnvironment environment;
   setUp(() async {
     dir = await Directory.systemTemp.createTemp('synthetic_repository_');
-    repository = LocalEpcrRepository(documentsDirectory: () async => dir);
+    environment = SyntheticStorageEnvironment();
+    repository = LocalEpcrRepository(
+      documentsDirectory: () async => dir,
+      storage: environment.storage(),
+    );
   });
   tearDown(() async => dir.delete(recursive: true));
   test(
@@ -23,10 +28,11 @@ void main() {
         }),
       );
       final path = created.sourcePath!;
-      final before = await File(path).readAsString();
+      final artifact = (await repository.storage.pendingUploads(dir)).single.file;
+      final before = await artifact.readAsBytes();
       final listed = (await repository.list()).single;
       expect(listed.sourcePath, path);
-      expect(await File(path).readAsString(), before);
+      expect(await artifact.readAsBytes(), before);
       final loaded = await repository.load(path);
       await repository.save(
         EpcrRecord.fromJson({
@@ -65,7 +71,7 @@ void main() {
       final entered = Completer<void>();
       final blocked = LocalEpcrRepository(
         documentsDirectory: () async => dir,
-        storage: EpcrStorageService(
+        storage: environment.storage(
           beforeReplace: (_, destination) async {
             entered.complete();
             await gate.future;
@@ -90,7 +96,7 @@ void main() {
     );
     final failing = LocalEpcrRepository(
       documentsDirectory: () async => dir,
-      storage: EpcrStorageService(
+      storage: environment.storage(
         beforeReplace: (_, destination) async {
           throw const FileSystemException('Synthetic failure');
         },
@@ -110,21 +116,11 @@ void main() {
     );
     expect(() => repository.save(EpcrRecord.fromJson({})), throwsStateError);
   });
-  test(
-    'malformed files and interrupted files remain untouched and detectable',
-    () async {
-      final created = await repository.create(EpcrRecord.fromJson({}));
-      final broken = File('${dir.path}/damaged.json');
-      await broken.writeAsString('{broken');
-      final orphan = File('${created.sourcePath}.epcr-tmp-orphan');
-      await orphan.writeAsString('{incomplete');
-      var errors = 0;
-      expect((await repository.list(onUnreadable: () => errors++)).length, 1);
-      expect(errors, 1);
-      expect(await repository.orphanCount(), 1);
-      await expectLater(repository.load(broken.path), throwsFormatException);
-      expect(await broken.readAsString(), '{broken');
-      expect(await orphan.readAsString(), '{incomplete');
-    },
-  );
+  test('legacy plaintext blocks listing and is never rewritten', () async {
+    final broken = File('${dir.path}/pcr_legacy.json');
+    await broken.writeAsString('{broken');
+    await expectLater(repository.list(), throwsA(anything));
+    await expectLater(repository.load(broken.path), throwsA(anything));
+    expect(await broken.readAsString(), '{broken');
+  });
 }

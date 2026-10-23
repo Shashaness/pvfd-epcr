@@ -11,6 +11,8 @@ docs/MILESTONE_2_ARCHITECTURE.md
 docs/MILESTONE_3_PUBLICATION_AUDIT.md
 docs/MILESTONE_4_1_ENCRYPTION_FOUNDATION.md
 docs/MILESTONE_4_2A_RECOVERY_ENCRYPTION.md
+docs/MILESTONE_4_2B_ENCRYPTED_STORAGE.md
+docs/MILESTONE_4_2B_SAMSUNG_QUALIFICATION.md
 docs/OPERATIONAL_RECOVERY_PUBLIC_KEY.md
 docs/PUBLICATION_INVENTORY.txt
 pvfd_epcr/.gitignore
@@ -88,6 +90,7 @@ pvfd_epcr/lib/application/services/epcr_lifecycle_service.dart
 pvfd_epcr/lib/core/epcr_id.dart
 pvfd_epcr/lib/data/repositories/epcr_repository.dart
 pvfd_epcr/lib/data/storage/epcr_storage_service.dart
+pvfd_epcr/lib/data/storage/protected_storage_crypto.dart
 pvfd_epcr/lib/domain/models/epcr_record.dart
 pvfd_epcr/lib/domain/models/record_json.dart
 pvfd_epcr/lib/domain/validation/epcr_validator.dart
@@ -98,6 +101,9 @@ pvfd_epcr/lib/presentation/widgets/add_vitals_dialog.dart
 pvfd_epcr/lib/presentation/widgets/epcr_field.dart
 pvfd_epcr/lib/presentation/widgets/pmh_section.dart
 pvfd_epcr/lib/presentation/widgets/responders_section.dart
+pvfd_epcr/lib/qualification/qualification_app.dart
+pvfd_epcr/lib/qualification/qualification_cases.dart
+pvfd_epcr/lib/qualification_main.dart
 pvfd_epcr/lib/services/document_export_service.dart
 pvfd_epcr/lib/services/encryption/android_keystore_provider.dart
 pvfd_epcr/lib/services/encryption/encrypted_envelope.dart
@@ -157,6 +163,8 @@ pvfd_epcr/test/fixtures/milestone_1_pdf_streams.json
 pvfd_epcr/test/fixtures/milestone_1_synthetic.xml
 pvfd_epcr/test/integration_services_test.dart
 pvfd_epcr/test/presentation_test.dart
+pvfd_epcr/test/protected_storage_interop_test.dart
+pvfd_epcr/test/qualification_harness_test.dart
 pvfd_epcr/test/recovery/development_public_key.dart
 pvfd_epcr/test/recovery/operational_recovery_key_test.dart
 pvfd_epcr/test/recovery/recovery_encryption_test.dart
@@ -165,6 +173,7 @@ pvfd_epcr/test/storage_test.dart
 pvfd_epcr/test/support/encryption/memory_crypto_provider.dart
 pvfd_epcr/test/support/memory_repository.dart
 pvfd_epcr/test/support/pdf_structure.dart
+pvfd_epcr/test/support/protected_storage.dart
 pvfd_epcr/test/support/synthetic_record.dart
 pvfd_epcr/test/widget_test.dart
 pvfd_epcr/web/favicon.png
@@ -192,9 +201,13 @@ pvfd_epcr/windows/runner/win32_window.h
 third_party/FLUTTER_LICENSE
 tools/audit_publication.py
 tools/pvfd_generate_recovery_keys.py
+tools/pvfd_qualification_inspect.py
 tools/pvfd_recover.py
 tools/pvfd_recovery_format.py
 tools/pvfd_recovery_io.py
 tools/requirements-recovery.txt
+tools/tests/NativeRecoveryEncrypt.java
 tools/tests/android_recovery_interop.py
+tools/tests/protected_storage_interop.py
+tools/tests/test_qualification_inspect.py
 tools/tests/test_recovery.py

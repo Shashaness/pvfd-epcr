@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import '../../domain/models/epcr_record.dart';
+import '../../core/epcr_id.dart';
 import '../storage/epcr_storage_service.dart';
 
 abstract class EpcrRepository {
@@ -8,6 +9,7 @@ abstract class EpcrRepository {
   Future<EpcrRecord> load(String path);
   Future<List<EpcrRecord>> list({void Function()? onUnreadable});
   Future<void> save(EpcrRecord record);
+  Future<void> delete(EpcrRecord record);
   Future<int> orphanCount();
 }
 
@@ -27,15 +29,15 @@ class LocalEpcrRepository implements EpcrRepository {
     EpcrRecord record, {
     String Function()? idFactory,
   }) async {
+    String? allocatedId;
     final file = await storage.create(
       await documentsDirectory(),
       record.toJson(),
-      idFactory: idFactory,
+      idFactory: () =>
+          allocatedId = idFactory?.call() ?? newEpcrId(DateTime.now()),
     );
     // No read-after-write race: creation returns its own committed snapshot.
-    final id = file.uri.pathSegments.last
-        .substring(4)
-        .replaceFirst('.json', '');
+    final id = allocatedId!;
     return EpcrRecord.fromJson({
       ...record.toJson(),
       'epcrNumber': id,
@@ -57,6 +59,13 @@ class LocalEpcrRepository implements EpcrRepository {
     final path = record.sourcePath;
     if (path == null) throw StateError('Record has no bound destination');
     return storage.save(File(path), record.toJson());
+  }
+
+  @override
+  Future<void> delete(EpcrRecord record) {
+    final path = record.sourcePath;
+    if (path == null) throw StateError('Record has no bound destination');
+    return storage.delete(File(path));
   }
 
   @override

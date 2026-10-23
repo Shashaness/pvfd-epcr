@@ -104,6 +104,10 @@ class KeystoreEncryption(context: Context) {
         guarded { mapOf("protection" to protection(key(id))) }
     }
 
+    fun usage(id: String): Map<String, Any> = synchronized(lock) {
+        guarded { key(id); mapOf("used" to ledger.uses(id)) }
+    }
+
     fun encrypt(id: String, plaintext: ByteArray, aad: ByteArray): Map<String, Any> = synchronized(lock) {
         guarded {
             bounded(plaintext, aad)
@@ -162,6 +166,10 @@ class KeystoreEncryption(context: Context) {
         }
         fun hasKey(id: String): Boolean = readableDatabase.rawQuery(
             "SELECT 1 FROM key_ids WHERE id = ?", arrayOf(id)).use { it.moveToFirst() }
+        fun uses(id: String): Int = readableDatabase.rawQuery(
+            "SELECT COUNT(*) FROM nonces WHERE id = ?", arrayOf(id)).use {
+                it.moveToFirst(); it.getInt(0)
+            }
         fun addKey(id: String) {
             writableDatabase.insertOrThrow("key_ids", null, ContentValues().apply { put("id", id) })
         }

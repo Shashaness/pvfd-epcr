@@ -18,7 +18,7 @@ APP_FILES = {'.gitignore', '.metadata', 'README.md', 'analysis_options.yaml',
 APP_DIRS = {'lib', 'test', 'android', 'ios', 'macos', 'linux', 'windows', 'web'}
 BANNED_PARTS = {'build', '.dart_tool', '.gradle', '.idea', '.vscode', 'ephemeral',
                 'Pods', '.symlinks', 'Exports', 'exports', 'records',
-                'patient_data', 'patient_records', 'backups', 'assets'}
+                'patient_data', 'patient_records', 'backups', 'protected_epcr_v1', 'assets'}
 BANNED_SUFFIXES = {'.pdf', '.apk', '.aab', '.ipa', '.jks', '.keystore', '.pem',
                    '.key', '.p12', '.pfx', '.env', '.db', '.sqlite', '.sqlite3',
                    '.bak', '.backup', '.pvfdbak', '.zip', '.log', '.tmp', '.dmp', '.hprof', '.local'}
@@ -61,7 +61,9 @@ def allowed(name):
             'tools/audit_publication.py', 'tools/pvfd_recovery_format.py',
             'tools/pvfd_recovery_io.py', 'tools/pvfd_generate_recovery_keys.py',
             'tools/pvfd_recover.py', 'tools/requirements-recovery.txt',
-            'tools/tests/test_recovery.py', 'tools/tests/android_recovery_interop.py'}:
+            'tools/tests/test_recovery.py', 'tools/tests/android_recovery_interop.py',
+            'tools/tests/NativeRecoveryEncrypt.java', 'tools/tests/protected_storage_interop.py',
+            'tools/pvfd_qualification_inspect.py', 'tools/tests/test_qualification_inspect.py'}:
         return True
     if p.parts[0] != 'pvfd_epcr' or len(p.parts) < 2:
         return False

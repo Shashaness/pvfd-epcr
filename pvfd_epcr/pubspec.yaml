@@ -10,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  crypto: ^3.0.7 # SHA-256 binds recovery bytes to the local authenticated revision.
   pdf:
   printing:
   xml: ^6.5.0

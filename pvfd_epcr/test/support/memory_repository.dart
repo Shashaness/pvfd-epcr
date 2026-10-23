@@ -41,5 +41,10 @@ class MemoryRepository implements EpcrRepository {
   Future<List<EpcrRecord>> list({void Function()? onUnreadable}) async =>
       records.values.toList();
   @override
+  Future<void> delete(EpcrRecord record) async {
+    records.remove(record.sourcePath);
+  }
+
+  @override
   Future<int> orphanCount() async => 0;
 }

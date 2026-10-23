@@ -85,3 +85,6 @@ PVFD_ePCR_*.xml
 __pycache__/
 *.py[cod]
 .venv/
+
+# Encrypted local persistence is operational data, never source.
+protected_epcr_v1/

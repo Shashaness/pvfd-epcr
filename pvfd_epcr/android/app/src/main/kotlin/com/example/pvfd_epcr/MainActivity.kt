@@ -18,6 +18,7 @@ class MainActivity : FlutterActivity() {
                 val value = when (call.method) {
                     "createKey" -> provider.create(id)
                     "lookupKey" -> provider.lookup(id)
+                    "keyUsage" -> provider.usage(id)
                     "encrypt" -> provider.encrypt(id, bytes("bytes"), bytes("aad"))
                     "decrypt" -> provider.decrypt(id, bytes("ciphertext"), bytes("nonce"), bytes("tag"), bytes("aad"))
                     else -> { result.notImplemented(); return@setMethodCallHandler }
@@ -49,5 +50,23 @@ class MainActivity : FlutterActivity() {
                 result.error("cryptoFailure", "Recovery operation failed", null)
             }
         }
+        MethodChannel(messenger, "com.pvfd3.pvfd_epcr/durability", StandardMethodCodec.INSTANCE,
+            messenger.makeBackgroundTaskQueue()).setMethodCallHandler { call, result ->
+            try {
+                if (call.method != "syncDirectory") { result.notImplemented(); return@setMethodCallHandler }
+                val path = call.argument<String>("path") ?: throw IllegalArgumentException()
+                val file = java.io.File(path)
+                val allowed = java.io.File(applicationInfo.dataDir).canonicalPath + "/"
+                if (!file.canonicalPath.startsWith(allowed) || !file.isDirectory) throw IllegalArgumentException()
+                android.system.Os.chmod(file.path, 448) // 0700, app-private store only.
+                val fd = android.system.Os.open(file.path, android.system.OsConstants.O_RDONLY or android.system.OsConstants.O_NOFOLLOW, 0)
+                try {
+                    if (!android.system.OsConstants.S_ISDIR(android.system.Os.fstat(fd).st_mode)) throw IllegalArgumentException()
+                    android.system.Os.fsync(fd)
+                } finally { android.system.Os.close(fd) }
+                result.success(null)
+            } catch (_: Exception) { result.error("directorySyncFailed", "Protected storage unavailable", null) }
+        }
+
     }
 }

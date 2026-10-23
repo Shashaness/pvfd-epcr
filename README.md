@@ -59,7 +59,7 @@ PDF drawing streams and XML output are compared with synthetic pre-refactor fixt
 
 ## Security and privacy
 
-This application handles potentially sensitive medical information. Current local records and exports are **not application-layer encrypted**. Authentication, authorization, audit trails, secure backup and retention require further work. Private storage and Android backup exclusions are useful safeguards, but do not establish compliance or a complete security design.
+This application handles potentially sensitive medical information. Milestone 4.2B uses encrypted-only local persistence with app-private encrypted recovery staging. The operator reports successful synthetic qualification on one development-only Samsung tablet; normal-editor acceptance and production deployment remain separate review gates. PDF/XML exports are not application-layer encrypted. See [encrypted storage design and deployment gates](docs/MILESTONE_4_2B_ENCRYPTED_STORAGE.md). Authentication, authorization, audit trails, secure backup and retention require further work. Private storage and Android backup exclusions are useful safeguards, but do not establish compliance or a complete security design.
 
 Do not deploy this development version for actual patient information without an appropriate security and operational review. Never upload patient records, exports, credentials, device logs containing clinical data, or identifying screenshots to a repository, issue or pull request. See [SECURITY.md](SECURITY.md) for disclosure guidance and the preferred GitHub private reporting channel and its required prepublication enablement.
 

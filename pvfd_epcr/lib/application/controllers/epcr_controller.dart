@@ -6,6 +6,7 @@ import '../../domain/models/epcr_record.dart';
 import '../../domain/models/record_json.dart';
 import '../../domain/validation/epcr_validator.dart';
 import '../../data/repositories/epcr_repository.dart';
+import '../../data/storage/protected_storage_crypto.dart';
 
 /// Sole owner of editable fields and save workflow. No widget/context dependency.
 class EpcrController extends ChangeNotifier {
@@ -145,6 +146,12 @@ class EpcrController extends ChangeNotifier {
       if (count > 0) {
         _reportError('Interrupted save files retained for manual recovery.');
       }
+    } on ProtectedStorageException catch (error) {
+      _reportError(
+        error.code == 'legacyPlaintextRejected'
+            ? 'Legacy plaintext ePCR storage detected. Loading and saving are blocked; a confirmed development reset is required. No migration was performed.'
+            : 'Protected storage unavailable. Original files have been retained.',
+      );
     } catch (_) {
       _reportError('Unable to inspect interrupted saves.');
     }

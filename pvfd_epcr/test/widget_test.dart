@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:convert';
+import 'support/protected_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pvfd_epcr/presentation/screens/epcr_editor_screen.dart';
@@ -10,11 +12,21 @@ import 'package:pvfd_epcr/services/nemsis_service.dart';
 import 'package:pvfd_epcr/services/pdf_service.dart';
 import 'package:pvfd_epcr/services/epcr_storage_service.dart';
 
+class WidgetRepository extends LocalEpcrRepository {
+  WidgetRepository({required super.documentsDirectory, required super.storage});
+  // Startup orphan inspection is tested separately; avoid starting real IO in
+  // the widget binding's fake timer zone before runAsync is entered.
+  @override
+  Future<int> orphanCount() async => 0;
+}
+
 void main() {
   late Directory dir;
-  setUp(
-    () async => dir = await Directory.systemTemp.createTemp('synthetic_form_'),
-  );
+  late SyntheticStorageEnvironment environment;
+  setUp(() async {
+    dir = await Directory.systemTemp.createTemp('synthetic_form_');
+    environment = SyntheticStorageEnvironment();
+  });
   tearDown(() async => dir.delete(recursive: true));
 
   Future<dynamic> mount(
@@ -22,16 +34,16 @@ void main() {
     EpcrStorageService? storage,
   }) async {
     final controller = EpcrController(
-      repository: LocalEpcrRepository(
+      repository: WidgetRepository(
         documentsDirectory: () async => dir,
-        storage: storage,
+        storage: storage ?? environment.storage(),
       ),
     );
     await tester.pumpWidget(
       MaterialApp(
         home: PCRFormPage(
           documentsDirectory: () async => dir,
-          storage: storage,
+          storage: storage ?? environment.storage(),
           controllerFactory: () => controller,
         ),
       ),
@@ -71,23 +83,33 @@ void main() {
   }
 
   testWidgets(
-    'legacy malformed values open safely; opening never rewrites file; edits preserve unknown fields',
+    'encrypted malformed field values open safely and edits preserve unknown fields',
     (tester) async {
-      final file = File('${dir.path}/pcr_legacy.json');
       const content =
           '{"epcrNumber":"legacy","patient":{"gender":"Future"},"incident":{"pmh":["Future condition"]},"clinical":{"vitals":42,"glasgowComaScale":{"eye":99},"future":true},"crew":42,"future":123}';
-      await tester.runAsync(() => file.writeAsString(content));
+      final file = (await tester.runAsync(
+        () => environment.storage().create(
+          dir,
+          jsonDecode(content) as Map<String, dynamic>,
+          idFactory: () => 'legacy',
+        ),
+      ))!;
       final dynamic state = await mount(tester);
       await tester.runAsync(() async {
         await state.loadPCR((await state.loadPCRs()).single);
       });
       await tester.pump(const Duration(seconds: 1));
       expect(tester.takeException(), isNull);
-      expect(await tester.runAsync(() => file.readAsString()), content);
+      expect(
+        (await tester.runAsync(
+          () => environment.storage().read(file),
+        ))!['future'],
+        123,
+      );
       state.assessment.text = 'Synthetic edit';
       await tester.runAsync(() async {
         await state.autoSavePCR();
-        final saved = await EpcrStorageService().read(file);
+        final saved = await environment.storage().read(file);
         expect(saved['future'], 123);
         expect(saved['crew'], 42);
         expect(recordMap(saved['clinical'])['vitals'], 42);
@@ -104,13 +126,13 @@ void main() {
       final dynamic state = await mount(tester);
       state.firstName.text = 'Synthetic A';
       final second = (await tester.runAsync(
-        () => EpcrStorageService().create(dir, {
+        () => environment.storage().create(dir, {
           'patient': {'firstName': 'Synthetic B'},
         }),
       ))!;
       await tester.runAsync(() async {
         await state.loadPCR({
-          ...await EpcrStorageService().read(second),
+          ...await environment.storage().read(second),
           '_filePath': second.path,
         });
         expect(state.firstName.text, 'Synthetic B');
@@ -131,7 +153,7 @@ void main() {
     var fail = true;
     final dynamic state = await mount(
       tester,
-      storage: EpcrStorageService(
+      storage: environment.storage(
         beforeReplace: (_, target) async {
           if (fail) throw const FileSystemException('Synthetic failure');
         },
@@ -139,13 +161,13 @@ void main() {
     );
     state.firstName.text = 'Synthetic unsaved';
     final second = (await tester.runAsync(
-      () => EpcrStorageService().create(dir, {
+      () => environment.storage().create(dir, {
         'patient': {'firstName': 'Synthetic B'},
       }),
     ))!;
     await tester.runAsync(() async {
       await state.loadPCR({
-        ...await EpcrStorageService().read(second),
+        ...await environment.storage().read(second),
         '_filePath': second.path,
       });
       expect(state.firstName.text, 'Synthetic unsaved');
@@ -198,7 +220,7 @@ void main() {
       var calls = 0;
       final dynamic state = await mount(
         tester,
-        storage: EpcrStorageService(
+        storage: environment.storage(
           beforeReplace: (_, target) async {
             if (calls++ == 0) {
               entered.complete();
@@ -210,16 +232,17 @@ void main() {
       await tester.runAsync(() async {
         entered = Completer<void>();
         release = Completer<void>();
-        final second = await EpcrStorageService().create(dir, {
+        final second = await environment.storage().create(dir, {
           'patient': {'firstName': 'Synthetic B'},
         });
+        final secondJson = await environment.storage().read(second);
         state.firstName.text = 'Synthetic A1';
         final first = state.autoSavePCR() as Future<void>;
         await entered.future;
         state.firstName.text = 'Synthetic A2';
         final switching =
             state.loadPCR({
-                  ...await EpcrStorageService().read(second),
+                  ...secondJson,
                   '_filePath': second.path,
                 })
                 as Future<void>;
@@ -242,20 +265,20 @@ void main() {
   ) async {
     final dynamic state = await mount(tester);
     await tester.runAsync(() async {
-      final file = await EpcrStorageService().create(dir, {
+      final file = await environment.storage().create(dir, {
         'clinical': {
           'pmh': ['Future condition', 'HTN'],
         },
       });
       await state.loadPCR({
-        ...await EpcrStorageService().read(file),
+        ...await environment.storage().read(file),
         '_filePath': file.path,
       });
       state.selectedPMH
         ..clear()
         ..add('None');
       await state.autoSavePCR();
-      expect(readPmh(await EpcrStorageService().read(file)), [
+      expect(readPmh(await environment.storage().read(file)), [
         'None',
         'Future condition',
       ]);

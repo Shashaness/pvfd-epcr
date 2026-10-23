@@ -50,6 +50,16 @@ class AndroidKeystoreProvider implements EncryptionKeyManager, AesGcmProvider {
     );
   }
 
+  Future<int> usedOperations(String keyId) async {
+    EncryptedEnvelope.validateKeyId(keyId);
+    final value = await _invoke('keyUsage', {'keyId': keyId});
+    final count = value['used'];
+    if (count is! int || count < 0 || count > 65536) {
+      throw const EncryptionException(EncryptionError.keyUnavailable);
+    }
+    return count;
+  }
+
   @override
   Future<EncryptionKeyInfo> create(String keyId) => _key('createKey', keyId);
   @override
