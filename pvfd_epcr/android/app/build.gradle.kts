@@ -21,6 +21,7 @@ android {
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
+        testInstrumentationRunner = "com.pvfd3.pvfd_epcr.CryptoSelfTestInstrumentation"
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }

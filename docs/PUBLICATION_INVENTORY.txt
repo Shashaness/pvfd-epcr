@@ -9,6 +9,7 @@ docs/BUILDING.md
 docs/MILESTONE_1_AUDIT.md
 docs/MILESTONE_2_ARCHITECTURE.md
 docs/MILESTONE_3_PUBLICATION_AUDIT.md
+docs/MILESTONE_4_1_ENCRYPTION_FOUNDATION.md
 docs/PUBLICATION_INVENTORY.txt
 pvfd_epcr/.gitignore
 pvfd_epcr/.metadata
@@ -16,8 +17,10 @@ pvfd_epcr/README.md
 pvfd_epcr/analysis_options.yaml
 pvfd_epcr/android/.gitignore
 pvfd_epcr/android/app/build.gradle.kts
+pvfd_epcr/android/app/src/androidTest/kotlin/com/pvfd3/pvfd_epcr/CryptoSelfTestInstrumentation.kt
 pvfd_epcr/android/app/src/debug/AndroidManifest.xml
 pvfd_epcr/android/app/src/main/AndroidManifest.xml
+pvfd_epcr/android/app/src/main/kotlin/com/example/pvfd_epcr/KeystoreEncryption.kt
 pvfd_epcr/android/app/src/main/kotlin/com/example/pvfd_epcr/MainActivity.kt
 pvfd_epcr/android/app/src/main/res/drawable-v21/launch_background.xml
 pvfd_epcr/android/app/src/main/res/drawable/launch_background.xml
@@ -92,6 +95,10 @@ pvfd_epcr/lib/presentation/widgets/epcr_field.dart
 pvfd_epcr/lib/presentation/widgets/pmh_section.dart
 pvfd_epcr/lib/presentation/widgets/responders_section.dart
 pvfd_epcr/lib/services/document_export_service.dart
+pvfd_epcr/lib/services/encryption/android_keystore_provider.dart
+pvfd_epcr/lib/services/encryption/encrypted_envelope.dart
+pvfd_epcr/lib/services/encryption/encryption_types.dart
+pvfd_epcr/lib/services/encryption/record_encryption_service.dart
 pvfd_epcr/lib/services/epcr_storage_service.dart
 pvfd_epcr/lib/services/maps_service.dart
 pvfd_epcr/lib/services/nemsis_service.dart
@@ -138,12 +145,15 @@ pvfd_epcr/pubspec.yaml
 pvfd_epcr/test/controller_test.dart
 pvfd_epcr/test/document_services_test.dart
 pvfd_epcr/test/domain_test.dart
+pvfd_epcr/test/encryption/android_keystore_provider_test.dart
+pvfd_epcr/test/encryption/encryption_test.dart
 pvfd_epcr/test/fixtures/milestone_1_pdf_streams.json
 pvfd_epcr/test/fixtures/milestone_1_synthetic.xml
 pvfd_epcr/test/integration_services_test.dart
 pvfd_epcr/test/presentation_test.dart
 pvfd_epcr/test/repository_test.dart
 pvfd_epcr/test/storage_test.dart
+pvfd_epcr/test/support/encryption/memory_crypto_provider.dart
 pvfd_epcr/test/support/memory_repository.dart
 pvfd_epcr/test/support/pdf_structure.dart
 pvfd_epcr/test/support/synthetic_record.dart
