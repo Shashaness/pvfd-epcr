@@ -104,26 +104,7 @@ class _PCRFormPageState extends State<PCRFormPage> {
     ),
   );
 
-  Future<void> exportNemsisXml() async {
-    if (!c.validateForestGpsRequirement()) return;
-    final snapshot = await c.autoSavePCR();
-    if (!mounted) return;
-    final file = await _exports.writeXml(snapshot);
-    if (mounted) _reportError('NEMSIS XML exported to\n${file.path}');
-  }
-
-  Future<void> exportPdfAndNemsis() async {
-    if (!c.validateForestGpsRequirement()) return;
-    final snapshot = await c.autoSavePCR();
-    if (!mounted) return;
-    final file = await _exports.writePdf(snapshot);
-    await _exports.writeXml(snapshot);
-    if (mounted) {
-      _reportError('PDF and NEMSIS XML exported to\n${file.parent.path}');
-    }
-  }
-
-  Future<void> emailPdf() async {
+  Future<void> sharePdf() async {
     if (!c.validateForestGpsRequirement()) return;
     final snapshot = await c.autoSavePCR();
     if (!mounted) return;
@@ -131,7 +112,7 @@ class _PCRFormPageState extends State<PCRFormPage> {
     await _sharing.sharePdf(file, snapshot.id);
   }
 
-  Future<void> emailNemsis() async {
+  Future<void> shareNemsis() async {
     if (!c.validateForestGpsRequirement()) return;
     final snapshot = await c.autoSavePCR();
     if (!mounted) return;
@@ -482,37 +463,21 @@ class _PCRFormPageState extends State<PCRFormPage> {
               children: [
                 ListTile(
                   leading: const Icon(Icons.picture_as_pdf),
-                  title: const Text('PDF'),
+                  title: const Text('Share PDF'),
                   onTap: () async {
                     Navigator.pop(context);
-                    await _perform(emailPdf);
+                    await _perform(sharePdf);
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.picture_as_pdf_outlined),
-                  title: const Text('NEMSIS XML'),
+                  title: const Text('Share NEMSIS XML'),
                   onTap: () async {
                     Navigator.pop(context);
-                    await _perform(emailNemsis);
+                    await _perform(shareNemsis);
                   },
                 ),
               ],
-            ),
-            ListTile(
-              leading: const Icon(Icons.file_upload),
-              title: const Text('Export PDF + NEMSIS'),
-              onTap: () async {
-                Navigator.pop(context);
-                await _perform(exportPdfAndNemsis);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.send),
-              title: const Text('Export NEMSIS Only'),
-              onTap: () async {
-                Navigator.pop(context);
-                await _perform(exportNemsisXml);
-              },
             ),
           ],
         ),
