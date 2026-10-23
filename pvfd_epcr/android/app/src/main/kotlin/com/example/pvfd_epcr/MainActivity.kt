@@ -29,5 +29,25 @@ class MainActivity : FlutterActivity() {
                 result.error("cryptoFailure", "Encryption operation failed", null)
             }
         }
+        val recovery = RecoveryEncryption()
+        MethodChannel(messenger, "com.pvfd3.pvfd_epcr/recovery", StandardMethodCodec.INSTANCE,
+            messenger.makeBackgroundTaskQueue()).setMethodCallHandler { call, result ->
+            try {
+                val der = call.argument<ByteArray>("publicKeyDer") ?: throw CryptoFailure("invalidPublicKey")
+                val id = call.argument<String>("keyId") ?: throw CryptoFailure("invalidKeyId")
+                when (call.method) {
+                    "validatePublicKey" -> result.success(recovery.validate(der, id))
+                    "encryptForRecovery" -> {
+                        val bytes = call.argument<ByteArray>("bytes") ?: throw CryptoFailure("malformedEnvelope")
+                        result.success(recovery.encrypt(bytes, der, id))
+                    }
+                    else -> result.notImplemented()
+                }
+            } catch (e: CryptoFailure) {
+                result.error(e.code, "Recovery operation failed", null)
+            } catch (_: Exception) {
+                result.error("cryptoFailure", "Recovery operation failed", null)
+            }
+        }
     }
 }

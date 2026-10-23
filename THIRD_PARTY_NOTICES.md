@@ -27,6 +27,10 @@ The following installed versions were resolved in the reviewed environment. Pack
 
 Review resolved transitive packages, native components (including printing/PDF components), fonts and notices before binary distribution. Apache and BSD/MIT notices remain the upstream authors' terms; the project's MIT file is not their replacement. Package versions may differ in historical milestone documents, which record earlier observations.
 
+## Offline recovery workstation dependency
+
+Milestone 4.2A tools use Python `cryptography` 49.0.0, licensed `Apache-2.0 OR BSD-3-Clause` (installed package license metadata reviewed). This is separate from the Dart package named cryptography. It is downloaded into the authorized recovery environment, not bundled with Flutter/Android. Preserve upstream notices when redistributing any Python dependency/wheel environment; native/transitive binary obligations still require review.
+
 ## District branding exclusion
 
 The original workspace contains an unused asset named `assets/images/pvfd_logo.jpg`. Inspection shows it is a PNG containing district insignia despite its filename extension. Ownership/redistribution permission has not been established. The entire root `assets/` directory is excluded from the initial publication inventory and remains intact locally. No active asset declaration or image reference requires this file for the current build, so excluding it does not change the application UI or document layout.

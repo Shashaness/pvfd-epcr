@@ -10,6 +10,7 @@ docs/MILESTONE_1_AUDIT.md
 docs/MILESTONE_2_ARCHITECTURE.md
 docs/MILESTONE_3_PUBLICATION_AUDIT.md
 docs/MILESTONE_4_1_ENCRYPTION_FOUNDATION.md
+docs/MILESTONE_4_2A_RECOVERY_ENCRYPTION.md
 docs/PUBLICATION_INVENTORY.txt
 pvfd_epcr/.gitignore
 pvfd_epcr/.metadata
@@ -18,10 +19,12 @@ pvfd_epcr/analysis_options.yaml
 pvfd_epcr/android/.gitignore
 pvfd_epcr/android/app/build.gradle.kts
 pvfd_epcr/android/app/src/androidTest/kotlin/com/pvfd3/pvfd_epcr/CryptoSelfTestInstrumentation.kt
+pvfd_epcr/android/app/src/androidTest/kotlin/com/pvfd3/pvfd_epcr/RecoverySelfTestInstrumentation.kt
 pvfd_epcr/android/app/src/debug/AndroidManifest.xml
 pvfd_epcr/android/app/src/main/AndroidManifest.xml
 pvfd_epcr/android/app/src/main/kotlin/com/example/pvfd_epcr/KeystoreEncryption.kt
 pvfd_epcr/android/app/src/main/kotlin/com/example/pvfd_epcr/MainActivity.kt
+pvfd_epcr/android/app/src/main/kotlin/com/example/pvfd_epcr/RecoveryEncryption.kt
 pvfd_epcr/android/app/src/main/res/drawable-v21/launch_background.xml
 pvfd_epcr/android/app/src/main/res/drawable/launch_background.xml
 pvfd_epcr/android/app/src/main/res/mipmap-hdpi/ic_launcher.png
@@ -104,6 +107,7 @@ pvfd_epcr/lib/services/maps_service.dart
 pvfd_epcr/lib/services/nemsis_service.dart
 pvfd_epcr/lib/services/pdf_service.dart
 pvfd_epcr/lib/services/printing_service.dart
+pvfd_epcr/lib/services/recovery/recovery_encryption_service.dart
 pvfd_epcr/lib/services/sharing_service.dart
 pvfd_epcr/linux/.gitignore
 pvfd_epcr/linux/CMakeLists.txt
@@ -151,6 +155,8 @@ pvfd_epcr/test/fixtures/milestone_1_pdf_streams.json
 pvfd_epcr/test/fixtures/milestone_1_synthetic.xml
 pvfd_epcr/test/integration_services_test.dart
 pvfd_epcr/test/presentation_test.dart
+pvfd_epcr/test/recovery/development_public_key.dart
+pvfd_epcr/test/recovery/recovery_encryption_test.dart
 pvfd_epcr/test/repository_test.dart
 pvfd_epcr/test/storage_test.dart
 pvfd_epcr/test/support/encryption/memory_crypto_provider.dart
@@ -182,3 +188,10 @@ pvfd_epcr/windows/runner/win32_window.cpp
 pvfd_epcr/windows/runner/win32_window.h
 third_party/FLUTTER_LICENSE
 tools/audit_publication.py
+tools/pvfd_generate_recovery_keys.py
+tools/pvfd_recover.py
+tools/pvfd_recovery_format.py
+tools/pvfd_recovery_io.py
+tools/requirements-recovery.txt
+tools/tests/android_recovery_interop.py
+tools/tests/test_recovery.py

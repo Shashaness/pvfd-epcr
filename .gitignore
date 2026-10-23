@@ -79,3 +79,9 @@ PVFD_ePCR_*.xml
 /pvfd_epcr/lib/main_old.dart
 /pvfd_epcr/lib/main_sha.dart
 /pvfd_epcr/lib/main_last_20260701.dart
+
+# Recovery envelopes and Python tooling state (never publish backup objects)
+*.pvfdbak
+__pycache__/
+*.py[cod]
+.venv/

@@ -21,13 +21,13 @@ BANNED_PARTS = {'build', '.dart_tool', '.gradle', '.idea', '.vscode', 'ephemeral
                 'patient_data', 'patient_records', 'backups', 'assets'}
 BANNED_SUFFIXES = {'.pdf', '.apk', '.aab', '.ipa', '.jks', '.keystore', '.pem',
                    '.key', '.p12', '.pfx', '.env', '.db', '.sqlite', '.sqlite3',
-                   '.bak', '.backup', '.zip', '.log', '.tmp', '.dmp', '.hprof', '.local'}
+                   '.bak', '.backup', '.pvfdbak', '.zip', '.log', '.tmp', '.dmp', '.hprof', '.local'}
 HISTORICAL = {'main_old.dart', 'main_sha.dart', 'main_last_20260701.dart'}
 FIXTURES = {'pvfd_epcr/test/fixtures/milestone_1_pdf_streams.json',
             'pvfd_epcr/test/fixtures/milestone_1_synthetic.xml'}
 PATTERNS = {
     'apple-team-assignment': re.compile(r'\bDEVELOPMENT_TEAM\s*=\s*"?[A-Z0-9]{10}"?\s*;'),
-    'private-key': re.compile(r'-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----'),
+    'private-key': re.compile(r'-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----|(?m:^-----BEGIN ENCRYPTED PRIVATE KEY-----)'),
     'credential-shape': re.compile(
         r'\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}'
         r'|AKIA[A-Z0-9]{16}|AIza[A-Za-z0-9_-]{30,}|sk-[A-Za-z0-9_-]{24,})\b'),
@@ -57,7 +57,11 @@ def allowed(name):
         return True
     if p.parts[0] == 'docs' and p.suffix in {'.md', '.txt'}:
         return True
-    if name == 'tools/audit_publication.py':
+    if name in {
+            'tools/audit_publication.py', 'tools/pvfd_recovery_format.py',
+            'tools/pvfd_recovery_io.py', 'tools/pvfd_generate_recovery_keys.py',
+            'tools/pvfd_recover.py', 'tools/requirements-recovery.txt',
+            'tools/tests/test_recovery.py', 'tools/tests/android_recovery_interop.py'}:
         return True
     if p.parts[0] != 'pvfd_epcr' or len(p.parts) < 2:
         return False
